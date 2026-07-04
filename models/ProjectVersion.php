@@ -13,7 +13,7 @@ class ProjectVersion
         $sql = "SELECT *
             FROM project_versions
             WHERE project_id = :project_id
-            ORDER BY change_date DESC";
+            ORDER BY created_at DESC";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -94,6 +94,27 @@ class ProjectVersion
             "change_type" => "Létrehozás",
             "description" => "Projekt létrehozása",
             "deployed" => 0
+        ]);
+    }
+    public function createVersion(
+        int $projectId,
+        string $versionNumber,
+        string $changeType = "feature",
+        string $description = "Projekt módosítása"
+    ): bool {
+
+        $sql = "INSERT INTO project_versions
+            (project_id, version_number, change_type, description, deployed)
+            VALUES
+            (:project_id, :version_number, :change_type, :description, 0)";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute([
+            "project_id" => $projectId,
+            "version_number" => $versionNumber,
+            "change_type" => $changeType,
+            "description" => $description
         ]);
     }
 }

@@ -34,33 +34,33 @@ class ProjectController
         require_once __DIR__ . "/../views/projects/index.php";
     }
 
-   public function create(): void
-{
-    $errors = [];
+    public function create(): void
+    {
+        $errors = [];
 
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $title = trim($_POST["title"] ?? "");
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $title = trim($_POST["title"] ?? "");
 
-        if ($title === "") {
-            $errors[] = "A projekt címe kötelező.";
-        }
-
-        if (empty($errors)) {
-            $projectId = $this->projectModel->create($_POST);
-
-            if ($projectId !== false) {
-                $this->versionModel->createInitialVersion($projectId);
-
-                header("Location: index.php");
-                exit;
+            if ($title === "") {
+                $errors[] = "A projekt címe kötelező.";
             }
 
-            $errors[] = "A projekt mentése nem sikerült.";
-        }
-    }
+            if (empty($errors)) {
+                $projectId = $this->projectModel->create($_POST);
 
-    require_once __DIR__ . "/../views/projects/create.php";
-}
+                if ($projectId !== false) {
+                    $this->versionModel->createInitialVersion($projectId);
+
+                    header("Location: index.php");
+                    exit;
+                }
+
+                $errors[] = "A projekt mentése nem sikerült.";
+            }
+        }
+
+        require_once __DIR__ . "/../views/projects/create.php";
+    }
 
     public function delete(): void
     {
@@ -109,7 +109,7 @@ class ProjectController
                 $versionNumber = trim($_POST["version_number"] ?? "");
 
                 if ($versionNumber !== "") {
-                    $this->versionModel->updateLatestVersion($id, $versionNumber);
+                    $this->versionModel->createVersion($id, $versionNumber);
                 }
 
                 header("Location: index.php");

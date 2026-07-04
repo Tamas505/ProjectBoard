@@ -34,6 +34,32 @@
                     <?= htmlspecialchars($project["description"]) ?>
                 </p>
 
+                <hr>
+
+                <p>
+                    <strong>Típus:</strong>
+                    <?= $project["type"] === "personal" ? "Saját projekt" : "Ügyfélprojekt" ?>
+                </p>
+
+                <p>
+                    <strong>Státusz:</strong>
+                    <?= htmlspecialchars($project["status"]) ?>
+                </p>
+
+                <?php if (!empty($project["deadline"])): ?>
+                    <p>
+                        <strong>Határidő:</strong>
+                        <?= htmlspecialchars($project["deadline"]) ?>
+                    </p>
+                <?php endif; ?>
+
+                <?php if (!empty($project["price"])): ?>
+                    <p>
+                        <strong>Ár:</strong>
+                        <?= number_format((float)$project["price"], 0, ",", " ") ?> Ft
+                    </p>
+                <?php endif; ?>
+
                 <?php if (!empty($project["notes"])): ?>
                     <div class="alert alert-warning">
                         <strong>Fejlesztői megjegyzések:</strong><br>
