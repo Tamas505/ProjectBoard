@@ -76,7 +76,6 @@ class ProjectController
 
     public function edit(): void
     {
-
         $id = (int) ($_GET["id"] ?? 0);
 
         if ($id <= 0) {
@@ -96,7 +95,6 @@ class ProjectController
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-
             $title = trim($_POST["title"] ?? "");
 
             if ($title === "") {
@@ -104,11 +102,17 @@ class ProjectController
             }
 
             if (empty($errors)) {
+
+                // Projekt alapadatainak mentése
                 $this->projectModel->update($id, $_POST);
 
+                // Verzió mentése csak akkor, ha tényleg változott
                 $versionNumber = trim($_POST["version_number"] ?? "");
 
-                if ($versionNumber !== "") {
+                if (
+                    $versionNumber !== "" &&
+                    (!$latestVersion || $versionNumber !== $latestVersion["version_number"])
+                ) {
                     $this->versionModel->createVersion($id, $versionNumber);
                 }
 

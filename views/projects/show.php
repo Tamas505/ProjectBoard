@@ -27,6 +27,8 @@
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body">
                 <h1 class="h3">
+
+                
                     <?= htmlspecialchars($project["title"]) ?>
                 </h1>
 
@@ -41,9 +43,30 @@
                     <?= $project["type"] === "personal" ? "Saját projekt" : "Ügyfélprojekt" ?>
                 </p>
 
+                <?php
+                $statusText = match ($project["status"]) {
+                    "planning" => "Tervezés",
+                    "active" => "Aktív",
+                    "completed" => "Kész",
+                    "cancelled" => "Törölve",
+                    default => $project["status"]
+                };
+
+                $statusClass = match ($project["status"]) {
+                    "planning" => "bg-warning",
+                    "active" => "bg-primary",
+                    "completed" => "bg-success",
+                    "cancelled" => "bg-danger",
+                    default => "bg-secondary"
+                };
+                ?>
+
                 <p>
                     <strong>Státusz:</strong>
-                    <?= htmlspecialchars($project["status"]) ?>
+
+                    <span class="badge <?= $statusClass ?>">
+                        <?= htmlspecialchars($statusText) ?>
+                    </span>
                 </p>
 
                 <?php if (!empty($project["deadline"])): ?>
