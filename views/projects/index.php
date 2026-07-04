@@ -85,7 +85,7 @@
             <?php foreach ($projects as $project): ?>
                 <div class="col-md-6">
 
-                    <div class="card shadow-sm border-0 h-100 project-card <?= htmlspecialchars($project["project_type"]) ?>">
+                    <div class="card shadow-sm border-0 h-100 project-card <?= htmlspecialchars($project["type"]) ?>">
                         <div class="card-body">
 
                             <h2 class="h5">
@@ -99,8 +99,8 @@
                             <p class="mb-0">
                                 <strong>Típus:</strong>
 
-                                <span class="badge <?= $project["project_type"] === "personal" ? "bg-info" : "bg-primary" ?>">
-                                    <?= $project["project_type"] === "personal" ? "Saját projekt" : "Ügyfélprojekt" ?>
+                                <span class="badge <?= $project["type"] === "personal" ? "bg-info" : "bg-primary" ?>">
+                                    <?= $project["type"] === "personal" ? "Saját projekt" : "Ügyfélprojekt" ?>
                                 </span>
                             </p>
 

@@ -42,21 +42,20 @@
                 <option value="cancelled">Törölve</option>
             </select>
 
-             <select name="project_type" class="form-select mb-3">
+            <select name="type" class="form-select mb-3">
                 <option value="personal">Saját projekt</option>
-                <option value="client">Ügyfélprojekt</option>   
+                <option value="client">Ügyfélprojekt</option>
             </select>
-
-            <input
-                type="text"
-                name="status"
-                class="form-control mb-3"
-                value="planning">
 
             <input
                 type="date"
                 name="deadline"
                 class="form-control mb-3">
+
+            <textarea
+                name="notes"
+                class="form-control mb-3"
+                placeholder="Megjegyzések"></textarea>
 
             <input
                 type="number"

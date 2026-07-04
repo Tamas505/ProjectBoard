@@ -18,26 +18,30 @@ class Project
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function create(array $data): bool
+    public function create(array $data): int|false
     {
         $sql = "INSERT INTO projects 
-            (title, description, notes,project_type, status, deadline, price, github_url, live_url)
+            (title, description, notes,type, status, deadline, price, github_url, live_url)
             VALUES
-            (:title, :description, :notes, :project_type, :status, :deadline, :price, :github_url, :live_url)";
+            (:title, :description, :notes, :type, :status, :deadline, :price, :github_url, :live_url)";
 
         $stmt = $this->pdo->prepare($sql);
 
-        return $stmt->execute([
+        if ($stmt->execute([
             "title" => $data["title"],
             "description" => $data["description"],
-            "project_type" => $data["project_type"],
+            "type" => $data["type"],
             "status" => $data["status"],
             "deadline" => $data["deadline"] ?: null,
             "price" => $data["price"] ?: null,
             "github_url" => $data["github_url"] ?: null,
             "live_url" => $data["live_url"] ?: null,
-            "notes" => $data["notes"] ?: null,
-        ]);
+            "notes" => $data["notes"] ?? null,
+        ])) {
+            return (int)$this->pdo->lastInsertId();
+        }
+
+        return false;
     }
 
     public function delete(int $id): bool
@@ -70,7 +74,7 @@ class Project
                 title = :title,
                 description = :description,
                 notes = :notes,
-                project_type = :project_type,
+                type = :type,
                 status = :status,
                 deadline = :deadline,
                 price = :price,
@@ -85,7 +89,7 @@ class Project
             "title" => $data["title"],
             "description" => $data["description"],
             "notes" => $data["notes"] ?: null,
-            "project_type" => $data["project_type"],
+            "type" => $data["type"],
             "status" => $data["status"],
             "deadline" => $data["deadline"] ?: null,
             "price" => $data["price"] ?: null,

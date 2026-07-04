@@ -48,11 +48,11 @@
                 class="form-control mb-3"
                 rows="4"><?= htmlspecialchars($project["notes"] ?? "") ?></textarea>
 
-            <select name="project_type" class="form-select mb-3">
-                <option value="personal" <?= $project["project_type"] === "personal" ? "selected" : "" ?>>
+            <select name="type" class="form-select mb-3">
+                <option value="personal" <?= $project["type"] === "personal" ? "selected" : "" ?>>
                     Saját projekt
                 </option>
-                <option value="client" <?= $project["project_type"] === "client" ? "selected" : "" ?>>
+                <option value="client" <?= $project["type"] === "client" ? "selected" : "" ?>>
                     Ügyfélprojekt
                 </option>
             </select>

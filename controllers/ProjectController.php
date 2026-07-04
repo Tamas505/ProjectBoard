@@ -34,26 +34,33 @@ class ProjectController
         require_once __DIR__ . "/../views/projects/index.php";
     }
 
-    public function create(): void
-    {
-        $errors = [];
+   public function create(): void
+{
+    $errors = [];
 
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $title = trim($_POST["title"] ?? "");
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $title = trim($_POST["title"] ?? "");
 
-            if ($title === "") {
-                $errors[] = "A projekt címe kötelező.";
-            }
+        if ($title === "") {
+            $errors[] = "A projekt címe kötelező.";
+        }
 
-            if (empty($errors)) {
+        if (empty($errors)) {
+            $projectId = $this->projectModel->create($_POST);
+
+            if ($projectId !== false) {
+                $this->versionModel->createInitialVersion($projectId);
 
                 header("Location: index.php");
                 exit;
             }
-        }
 
-        require_once __DIR__ . "/../views/projects/create.php";
+            $errors[] = "A projekt mentése nem sikerült.";
+        }
     }
+
+    require_once __DIR__ . "/../views/projects/create.php";
+}
 
     public function delete(): void
     {
