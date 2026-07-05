@@ -13,7 +13,6 @@ $action = $_GET["action"] ?? "index";
 
 if ($action === "login") {
     $authController->login();
-
 } elseif ($action === "logout") {
     $authController->logout();
 
@@ -28,7 +27,13 @@ if ($action === "login") {
     $projectController->show();
 
 } elseif ($action === "createVersion") {
-    $projectController->createVersion();    
+    $projectController->createVersion();
+
+} elseif ($action === "updateVersion") {
+    $projectController->updateVersion();
+
+} elseif ($action === "deleteVersion") {
+    $projectController->deleteVersion();
 
 } elseif ($action === "edit") {
     $projectController->edit();

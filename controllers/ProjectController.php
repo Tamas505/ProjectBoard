@@ -184,4 +184,49 @@ class ProjectController
 
         require_once __DIR__ . "/../views/versions/create.php";
     }
+
+    public function updateVersion(): void
+    {
+        $versionId = (int) ($_POST["id"] ?? 0);
+
+        if ($versionId <= 0) {
+            header("Location: index.php");
+            exit;
+        }
+
+        $version = $this->versionModel->getById($versionId);
+
+        if (!$version) {
+            header("Location: index.php");
+            exit;
+        }
+
+        $this->versionModel->update($versionId, $_POST);
+
+        header("Location: index.php?action=show&id=" . $version["project_id"]);
+        exit;
+    }
+    public function deleteVersion(): void
+    {
+        $versionId = (int) ($_POST["id"] ?? 0);
+
+        if ($versionId <= 0) {
+            header("Location: index.php");
+            exit;
+        }
+
+        $version = $this->versionModel->getById($versionId);
+
+        if (!$version) {
+            header("Location: index.php");
+            exit;
+        }
+
+        $projectId = (int) $version["project_id"];
+
+        $this->versionModel->delete($versionId);
+
+        header("Location: index.php?action=show&id=" . $projectId);
+        exit;
+    }
 }
