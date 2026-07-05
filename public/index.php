@@ -9,38 +9,60 @@ require_once __DIR__ . "/../controllers/AuthController.php";
 $projectController = new ProjectController($pdo);
 $authController = new AuthController($pdo);
 
+// Az URL-ben megadott művelet.
+// Ha nincs action paraméter, akkor a projektlista jelenik meg.
 $action = $_GET["action"] ?? "index";
 
+// A bejelentkezési oldal az egyetlen,
+// amely admin bejelentkezés nélkül is elérhető.
 if ($action === "login") {
     $authController->login();
-} elseif ($action === "logout") {
-    $authController->logout();
+    exit;
+}
 
-} elseif (!isset($_SESSION["admin_id"])) {
+// Minden más művelethez admin bejelentkezés szükséges.
+if (!isset($_SESSION["admin_id"])) {
     header("Location: index.php?action=login");
     exit;
+}
 
-} elseif ($action === "create") {
-    $projectController->create();
+// A megfelelő vezérlő metódus meghívása.
+switch ($action) {
 
-} elseif ($action === "show") {
-    $projectController->show();
+    case "logout":
+        $authController->logout();
+        break;
 
-} elseif ($action === "createVersion") {
-    $projectController->createVersion();
+    case "create":
+        $projectController->create();
+        break;
 
-} elseif ($action === "updateVersion") {
-    $projectController->updateVersion();
+    case "edit":
+        $projectController->edit();
+        break;
 
-} elseif ($action === "deleteVersion") {
-    $projectController->deleteVersion();
+    case "delete":
+        $projectController->delete();
+        break;
 
-} elseif ($action === "edit") {
-    $projectController->edit();
+    case "show":
+        $projectController->show();
+        break;
 
-} elseif ($action === "delete") {
-    $projectController->delete();
+    case "createVersion":
+        $projectController->createVersion();
+        break;
 
-} else {
-    $projectController->index();
+    case "updateVersion":
+        $projectController->updateVersion();
+        break;
+
+    case "deleteVersion":
+        $projectController->deleteVersion();
+        break;
+
+    case "index":
+    default:
+        $projectController->index();
+        break;
 }

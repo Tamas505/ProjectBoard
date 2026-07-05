@@ -86,27 +86,32 @@
                 <div class="col-md-6">
 
                     <div class="card shadow-sm border-0 h-100 project-card <?= htmlspecialchars($project["type"]) ?>">
-                        <div class="card-body">
+                        <div class="card-body d-flex flex-column">
 
-                            <h2 class="h5">
-                                <?= htmlspecialchars($project["title"]) ?>
-                            </h2>
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h2 class="h5 mb-0">
+                                    <?= htmlspecialchars($project["title"]) ?>
+                                </h2>
 
-                            <p>
+                                <span class="badge bg-dark">
+                                    v<?= htmlspecialchars($project["latest_version"]) ?>
+                                </span>
+                            </div>
+
+                            <p class="text-muted mb-3">
                                 <?= htmlspecialchars($project["description"]) ?>
                             </p>
 
-                            <p class="mb-0">
-                                <strong>Típus:</strong>
-
-                                <span class="badge <?= $project["type"] === "personal" ? "bg-info" : "bg-primary" ?>">
-                                    <?= $project["type"] === "personal" ? "Saját projekt" : "Ügyfélprojekt" ?>
-                                </span>
-                            </p>
+                            <?php if (!empty($project["deadline"])): ?>
+                                <p class="text-muted small mb-3">
+                                    📅 Határidő:
+                                    <strong><?= date("Y. m. d.", strtotime($project["deadline"])) ?></strong>
+                                </p>
+                            <?php endif; ?>
 
                             <?php
                             $statusClass = match ($project["status"]) {
-                                "planning" => "bg-warning",
+                                "planning" => "bg-warning text-dark",
                                 "active" => "bg-primary",
                                 "completed" => "bg-success",
                                 "cancelled" => "bg-danger",
@@ -122,39 +127,36 @@
                             };
                             ?>
 
-                            <p class="mt-2">
-                                <strong>Státusz:</strong>
+                            <div class="mb-3">
+                                <span class="badge <?= $project["type"] === "personal" ? "bg-info text-dark" : "bg-primary" ?>">
+                                    <?= $project["type"] === "personal" ? "Saját projekt" : "Ügyfélprojekt" ?>
+                                </span>
 
                                 <span class="badge <?= $statusClass ?>">
                                     <?= htmlspecialchars($statusText) ?>
                                 </span>
-                            </p>
+                            </div>
 
-                            <p class="mt-2 mb-0">
-                                <strong>Verzió:</strong>
+                            <div class="mt-auto pt-3 border-top d-flex gap-2 flex-wrap">
+                                <a
+                                    href="index.php?action=show&id=<?= $project['id'] ?>"
+                                    class="btn btn-info btn-sm">
+                                    📋 Részletek
+                                </a>
 
-                                <span class="badge bg-dark">
-                                    <?= htmlspecialchars($project["latest_version"]) ?>
-                                </span>
-                            </p>
+                                <a
+                                    href="index.php?action=edit&id=<?= $project['id'] ?>"
+                                    class="btn btn-warning btn-sm">
+                                    ✏️ Módosítás
+                                </a>
 
-                            <a
-                                href="index.php?action=delete&id=<?= $project['id'] ?>"
-                                class="btn btn-danger btn-sm mt-3"
-                                onclick="return confirm('Biztosan törlöd ezt a projektet?')">
-                                Törlés
-                            </a>
-
-                            <a
-                                href="index.php?action=edit&id=<?= $project['id'] ?>"
-                                class="btn btn-warning btn-sm mt-3">
-                                Módosítás
-                            </a>
-                            <a
-                                href="index.php?action=show&id=<?= $project['id'] ?>"
-                                class="btn btn-info btn-sm mt-3">
-                                Részletek
-                            </a>
+                                <a
+                                    href="index.php?action=delete&id=<?= $project['id'] ?>"
+                                    class="btn btn-outline-danger btn-sm ms-auto"
+                                    onclick="return confirm('Biztosan törlöd ezt a projektet?')">
+                                    🗑️ Törlés
+                                </a>
+                            </div>
 
                         </div>
                     </div>

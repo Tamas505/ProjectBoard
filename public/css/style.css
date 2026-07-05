@@ -253,3 +253,16 @@ body {
   align-items: center;
 }
 
+.project-card {
+    transition: transform .2s ease, box-shadow .2s ease;
+    overflow: hidden;
+}
+
+.project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, .12) !important;
+}
+
+.project-card .card-body {
+    min-height: 240px;
+}
