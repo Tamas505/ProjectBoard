@@ -1,21 +1,13 @@
-http://localhost/projectboard/public/
-
-
-
 # ProjectBoard
 
-## Indítás
+Projektkezelő rendszer PHP 8, MariaDB, MVC és Bootstrap felhasználásával.
 
-1. XAMPP indítása
-2. Apache
-3. MariaDB
-4. localhost/projectboard/public
+## Funkciók
 
-## Adatbázis
-
-projectboard.sql importálása
-
-## Belépés
-
-Felhasználónév: admin
-Jelszó: ****
+- Projekt létrehozása
+- Projekt módosítása
+- Projekt törlése
+- Verziókezelés
+- Verziónapló idővonallal
+- Dashboard statisztikák
+- Saját és ügyfél projektek kezelése
