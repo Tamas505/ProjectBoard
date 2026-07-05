@@ -14,17 +14,24 @@ class ProjectController
         $this->versionModel = new ProjectVersion($pdo);
     }
 
+    // Közös átirányító metódus, hogy ne ismétlődjön sokszor a header + exit.
+    private function redirect(string $url = "index.php"): void
+    {
+        header("Location: " . $url);
+        exit;
+    }
+
+    // Projektlista megjelenítése dashboard adatokkal és legfrissebb verzióval.
     public function index(): void
     {
         $projects = $this->projectModel->getAll();
 
         foreach ($projects as &$project) {
-            $latestVersion = $this->versionModel->getLatestVersion($project["id"]);
-
+            $latestVersion = $this->versionModel->getLatestVersion((int)$project["id"]);
             $project["latest_version"] = $latestVersion["version_number"] ?? "-";
         }
-        unset($project);
 
+        unset($project);
 
         $projectCount = $this->projectModel->getProjectCount();
         $personalProjectCount = $this->projectModel->getPersonalProjectCount();
@@ -34,6 +41,7 @@ class ProjectController
         require_once __DIR__ . "/../views/projects/index.php";
     }
 
+    // Új projekt létrehozása.
     public function create(): void
     {
         $errors = [];
@@ -50,9 +58,7 @@ class ProjectController
 
                 if ($projectId !== false) {
                     $this->versionModel->createInitialVersion($projectId);
-
-                    header("Location: index.php");
-                    exit;
+                    $this->redirect();
                 }
 
                 $errors[] = "A projekt mentése nem sikerült.";
@@ -62,6 +68,7 @@ class ProjectController
         require_once __DIR__ . "/../views/projects/create.php";
     }
 
+    // Projekt törlése.
     public function delete(): void
     {
         $id = (int) ($_GET["id"] ?? 0);
@@ -70,31 +77,28 @@ class ProjectController
             $this->projectModel->delete($id);
         }
 
-        header("Location: index.php");
-        exit;
+        $this->redirect();
     }
 
+    // Projekt szerkesztése.
     public function edit(): void
     {
         $id = (int) ($_GET["id"] ?? 0);
 
         if ($id <= 0) {
-            header("Location: index.php");
-            exit;
+            $this->redirect();
         }
 
         $project = $this->projectModel->getById($id);
         $latestVersion = $this->versionModel->getLatestVersion($id);
 
         if (!$project) {
-            header("Location: index.php");
-            exit;
+            $this->redirect();
         }
 
         $errors = [];
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
             $title = trim($_POST["title"] ?? "");
 
             if ($title === "") {
@@ -102,11 +106,8 @@ class ProjectController
             }
 
             if (empty($errors)) {
-
-                // Projekt alapadatainak mentése
                 $this->projectModel->update($id, $_POST);
 
-                // Verzió mentése csak akkor, ha tényleg változott
                 $versionNumber = trim($_POST["version_number"] ?? "");
 
                 if (
@@ -116,28 +117,26 @@ class ProjectController
                     $this->versionModel->createVersion($id, $versionNumber);
                 }
 
-                header("Location: index.php");
-                exit;
+                $this->redirect();
             }
         }
 
         require_once __DIR__ . "/../views/projects/edit.php";
     }
 
+    // Egy projekt részleteinek és verziónaplójának megjelenítése.
     public function show(): void
     {
         $id = (int) ($_GET["id"] ?? 0);
 
         if ($id <= 0) {
-            header("Location: index.php");
-            exit;
+            $this->redirect();
         }
 
         $project = $this->projectModel->getById($id);
 
         if (!$project) {
-            header("Location: index.php");
-            exit;
+            $this->redirect();
         }
 
         $versions = $this->versionModel->getByProjectId($id);
@@ -145,20 +144,19 @@ class ProjectController
         require_once __DIR__ . "/../views/projects/show.php";
     }
 
+    // Új verzióbejegyzés létrehozása egy projekthez.
     public function createVersion(): void
     {
         $projectId = (int) ($_GET["project_id"] ?? 0);
 
         if ($projectId <= 0) {
-            header("Location: index.php");
-            exit;
+            $this->redirect();
         }
 
         $project = $this->projectModel->getById($projectId);
 
         if (!$project) {
-            header("Location: index.php");
-            exit;
+            $this->redirect();
         }
 
         $errors = [];
@@ -177,56 +175,52 @@ class ProjectController
 
                 $this->versionModel->create($_POST);
 
-                header("Location: index.php?action=show&id=" . $projectId);
-                exit;
+                $this->redirect("index.php?action=show&id=" . $projectId);
             }
         }
 
         require_once __DIR__ . "/../views/versions/create.php";
     }
 
+    // Verzióbejegyzés módosítása.
     public function updateVersion(): void
     {
         $versionId = (int) ($_POST["id"] ?? 0);
 
         if ($versionId <= 0) {
-            header("Location: index.php");
-            exit;
+            $this->redirect();
         }
 
         $version = $this->versionModel->getById($versionId);
 
         if (!$version) {
-            header("Location: index.php");
-            exit;
+            $this->redirect();
         }
 
         $this->versionModel->update($versionId, $_POST);
 
-        header("Location: index.php?action=show&id=" . $version["project_id"]);
-        exit;
+        $this->redirect("index.php?action=show&id=" . $version["project_id"]);
     }
+
+    // Verzióbejegyzés törlése.
     public function deleteVersion(): void
     {
         $versionId = (int) ($_POST["id"] ?? 0);
 
         if ($versionId <= 0) {
-            header("Location: index.php");
-            exit;
+            $this->redirect();
         }
 
         $version = $this->versionModel->getById($versionId);
 
         if (!$version) {
-            header("Location: index.php");
-            exit;
+            $this->redirect();
         }
 
         $projectId = (int) $version["project_id"];
 
         $this->versionModel->delete($versionId);
 
-        header("Location: index.php?action=show&id=" . $projectId);
-        exit;
+        $this->redirect("index.php?action=show&id=" . $projectId);
     }
 }
