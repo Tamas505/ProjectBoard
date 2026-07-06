@@ -9,9 +9,12 @@ class Auth
         $this->pdo = $pdo;
     }
 
+    // Admin felhasználó hitelesítése.
     public function login(string $username, string $password): array|false
     {
-        $sql = "SELECT * FROM admins WHERE username = :username";
+        $sql = "SELECT *
+            FROM admins
+            WHERE username = :username";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -21,10 +24,14 @@ class Auth
 
         $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($admin && password_verify($password, $admin["password"])) {
-            return $admin;
+        if (!$admin) {
+            return false;
         }
 
-        return false;
+        if (!password_verify($password, $admin["password"])) {
+            return false;
+        }
+
+        return $admin;
     }
 }

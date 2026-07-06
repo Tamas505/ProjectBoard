@@ -9,55 +9,53 @@ class Project
         $this->pdo = $pdo;
     }
 
+    // Összes projekt lekérése, legújabbak elöl.
     public function getAll(): array
     {
-        $sql = "SELECT * FROM projects ORDER BY created_at DESC";
+        $sql = "SELECT *
+            FROM projects
+            ORDER BY created_at DESC";
 
         $stmt = $this->pdo->query($sql);
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    // Új projekt létrehozása.
     public function create(array $data): int|false
     {
-        $sql = "INSERT INTO projects 
-            (title, description, notes,type, status, deadline, price, github_url, live_url)
+        $sql = "INSERT INTO projects
+            (title, description, notes, type, status, deadline, price, github_url, live_url)
             VALUES
             (:title, :description, :notes, :type, :status, :deadline, :price, :github_url, :live_url)";
 
         $stmt = $this->pdo->prepare($sql);
 
-        if ($stmt->execute([
+        $success = $stmt->execute([
             "title" => $data["title"],
-            "description" => $data["description"],
+            "description" => $data["description"] ?? null,
+            "notes" => $data["notes"] ?: null,
             "type" => $data["type"],
             "status" => $data["status"] ?? "planning",
             "deadline" => $data["deadline"] ?: null,
             "price" => $data["price"] ?: null,
             "github_url" => $data["github_url"] ?: null,
-            "live_url" => $data["live_url"] ?: null,
-            "notes" => $data["notes"] ?? null,
-        ])) {
-            return (int)$this->pdo->lastInsertId();
+            "live_url" => $data["live_url"] ?: null
+        ]);
+
+        if ($success) {
+            return (int) $this->pdo->lastInsertId();
         }
 
         return false;
     }
 
-    public function delete(int $id): bool
-    {
-        $sql = "DELETE FROM projects WHERE id = :id";
-
-        $stmt = $this->pdo->prepare($sql);
-
-        return $stmt->execute([
-            "id" => $id
-        ]);
-    }
-
+    // Egy projekt lekérése azonosító alapján.
     public function getById(int $id): array|false
     {
-        $sql = "SELECT * FROM projects WHERE id = :id";
+        $sql = "SELECT *
+            FROM projects
+            WHERE id = :id";
 
         $stmt = $this->pdo->prepare($sql);
 
@@ -68,9 +66,11 @@ class Project
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    // Projekt adatainak módosítása.
     public function update(int $id, array $data): bool
     {
-        $sql = "UPDATE projects SET
+        $sql = "UPDATE projects
+            SET
                 title = :title,
                 description = :description,
                 notes = :notes,
@@ -87,7 +87,7 @@ class Project
         return $stmt->execute([
             "id" => $id,
             "title" => $data["title"],
-            "description" => $data["description"],
+            "description" => $data["description"] ?? null,
             "notes" => $data["notes"] ?: null,
             "type" => $data["type"],
             "status" => $data["status"] ?? "planning",
@@ -97,18 +97,36 @@ class Project
             "live_url" => $data["live_url"] ?: null
         ]);
     }
+
+    // Projekt törlése.
+    public function delete(int $id): bool
+    {
+        $sql = "DELETE FROM projects
+            WHERE id = :id";
+
+        $stmt = $this->pdo->prepare($sql);
+
+        return $stmt->execute([
+            "id" => $id
+        ]);
+    }
+
+    // Összes projekt száma.
     public function getProjectCount(): int
     {
-        $sql = "SELECT COUNT(*) FROM projects";
+        $sql = "SELECT COUNT(*)
+            FROM projects";
 
         $stmt = $this->pdo->query($sql);
 
         return (int) $stmt->fetchColumn();
     }
+
+    // Saját projektek száma.
     public function getPersonalProjectCount(): int
     {
-        $sql = "SELECT COUNT(*) 
-            FROM projects 
+        $sql = "SELECT COUNT(*)
+            FROM projects
             WHERE type = 'personal'";
 
         $stmt = $this->pdo->query($sql);
@@ -116,6 +134,7 @@ class Project
         return (int) $stmt->fetchColumn();
     }
 
+    // Ügyfélprojektek száma.
     public function getClientProjectCount(): int
     {
         $sql = "SELECT COUNT(*)
@@ -127,6 +146,7 @@ class Project
         return (int) $stmt->fetchColumn();
     }
 
+    // Aktív projektek száma.
     public function getActiveProjectCount(): int
     {
         $sql = "SELECT COUNT(*)
