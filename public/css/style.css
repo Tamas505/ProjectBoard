@@ -1,3 +1,31 @@
+/* ==================================================
+   GLOBAL LAYOUT
+================================================== */
+
+html,
+body {
+  min-height: 100vh;
+}
+
+body {
+  background: linear-gradient(
+    135deg,
+    #448eef 0%,
+    #e0f2fe 50%,
+    #002b56 100%
+  ) !important;
+}
+
+/* ==================================================
+   GENERAL CARDS
+================================================== */
+
+.card {
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Projektkártyák típusa szerinti felső színezés */
 .project-card.personal {
   border-top: 5px solid #6ecbf7 !important;
 }
@@ -6,6 +34,21 @@
   border-top: 5px solid #0d6efd !important;
 }
 
+.project-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.12) !important;
+}
+
+.project-card .card-body {
+  min-height: 240px;
+}
+
+/* Dashboard kártyák bal oldali színezése */
 .dashboard-total {
   border-left: 5px solid #6c757d !important;
 }
@@ -22,34 +65,9 @@
   border-left: 5px solid #198754 !important;
 }
 
-body {
-  background: linear-gradient(
-    135deg,
-    #dbeafe 0%,
-    #e0f2fe 50%,
-    #f8fafc 100%
-  ) !important;
-}
-
-.card {
-  background-color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-html,
-body {
-  min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #448eef 0%,
-    #e0f2fe 50%,
-    #002b56 100%
-  ) !important;
-}
-
-/* =======================================
+/* ==================================================
    VERSION TIMELINE
-======================================= */
+================================================== */
 
 .version-header {
   display: flex;
@@ -80,6 +98,7 @@ body {
   align-items: center;
 }
 
+/* Az idővonal függőleges vonala */
 .version-left::after {
   content: "";
   position: absolute;
@@ -91,16 +110,18 @@ body {
   border-radius: 999px;
 }
 
+/* Az utolsó elem után már ne folytatódjon a vonal */
 .version-row:last-child .version-left::after {
   display: none;
 }
 
+/* Kör alakú verziószám jelölő */
 .version-number {
   width: 58px;
   height: 58px;
   border: 2px solid #0d6efd;
   border-radius: 50%;
-  background: #fff;
+  background: #ffffff;
   color: #0d6efd;
   display: flex;
   align-items: center;
@@ -110,23 +131,20 @@ body {
   z-index: 2;
 }
 
-.version-dot {
-  display: none;
-}
-
 .version-content {
   min-width: 0;
 }
 
 .version-card {
   position: relative;
-  background: #fff;
+  background: #ffffff;
   border-radius: 18px;
   padding: 1.5rem;
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
   transition: 0.25s ease;
 }
 
+/* Kis nyíl a verziókártya bal oldalán */
 .version-card::before {
   content: "";
   position: absolute;
@@ -134,7 +152,7 @@ body {
   top: 50%;
   width: 16px;
   height: 16px;
-  background: #fff;
+  background: #ffffff;
   transform: translateY(-50%) rotate(45deg);
   border-radius: 3px;
 }
@@ -158,6 +176,7 @@ body {
   margin: 0;
 }
 
+/* Verzió típus és élesítési állapot jelvények */
 .version-type,
 .version-deployed {
   display: inline-flex;
@@ -209,6 +228,57 @@ body {
   color: #997404;
 }
 
+/* Verzió műveletgombok */
+.version-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* ==================================================
+   LOGIN
+================================================== */
+
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #5a9df8 0%, #d8e9f8 100%);
+}
+
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 460px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 2.5rem;
+}
+
+.login-card h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.login-card .form-control {
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+.login-card .btn {
+  border-radius: 10px;
+}
+
+/* ==================================================
+   RESPONSIVE
+================================================== */
+
 @media (max-width: 768px) {
   .version-header {
     flex-direction: column;
@@ -233,75 +303,4 @@ body {
     flex-direction: column;
     align-items: flex-start;
   }
-}
-
-.version-actions {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    margin-top: 1rem;
-    cursor: pointer;
-}
-
-.version-actions::-webkit-details-marker {
-    display: none;
-}
-
-.version-actions {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.project-card {
-    transition: transform .2s ease, box-shadow .2s ease;
-    overflow: hidden;
-}
-
-.project-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 1rem 2rem rgba(0, 0, 0, .12) !important;
-}
-
-.project-card .card-body {
-    min-height: 240px;
-}
-
-/* ===========================
-   LOGIN
-=========================== */
-
-.login-page {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #5a9df8 0%, #d8e9f8 100%);
-}
-
-.login-wrapper {
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
-}
-
-.login-card {
-    width: 100%;
-    max-width: 460px;
-    background: #fff;
-    border-radius: 18px;
-    padding: 2.5rem;
-}
-
-.login-card h1 {
-    font-size: 2.2rem;
-    font-weight: 700;
-}
-
-.login-card .form-control {
-    border-radius: 10px;
-    padding: .75rem;
-}
-
-.login-card .btn {
-    border-radius: 10px;
 }

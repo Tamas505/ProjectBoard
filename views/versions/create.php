@@ -9,7 +9,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Új verzió - ClientBoard</title>
+    <title>Új verzió - ProjectBoard</title>
 
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -20,7 +20,10 @@
 
     <div class="container py-4" style="max-width: 700px;">
 
-        <a href="index.php?action=show&id=<?= $project["id"] ?>" class="btn btn-secondary mb-3">
+        <!-- Visszalépés az aktuális projekt részleteihez -->
+        <a
+            href="index.php?action=show&id=<?= htmlspecialchars((string) $project["id"]) ?>"
+            class="btn btn-secondary mb-3">
             Vissza
         </a>
 
@@ -28,6 +31,7 @@
             Új verzió: <?= htmlspecialchars($project["title"]) ?>
         </h1>
 
+        <!-- Validációs hibák megjelenítése -->
         <?php if (!empty($errors)): ?>
             <div class="alert alert-danger">
                 <?php foreach ($errors as $error): ?>
@@ -36,7 +40,9 @@
             </div>
         <?php endif; ?>
 
+        <!-- Új verzió rögzítése -->
         <form method="POST">
+
             <input
                 type="text"
                 name="version_number"
@@ -61,8 +67,7 @@
                 name="notes"
                 class="form-control mb-3"
                 placeholder="Fejlesztői megjegyzések"
-                rows="4">
-            </textarea>
+                rows="4"></textarea>
 
             <div class="form-check mb-3">
                 <input
@@ -79,6 +84,7 @@
             <button type="submit" class="btn btn-primary">
                 Verzió mentése
             </button>
+
         </form>
 
     </div>
