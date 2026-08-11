@@ -6,8 +6,9 @@ require_once __DIR__ . "/../config/db.php";
 require_once __DIR__ . "/../controllers/ProjectController.php";
 require_once __DIR__ . "/../controllers/AuthController.php";
 
-$projectController = new ProjectController($pdo);
-$authController = new AuthController($pdo);
+// A PDO objektum átadása a vezérlőknek
+$projectController = new ProjectController($pdo);  
+$authController = new AuthController($pdo); 
 
 // Az URL-ben megadott művelet.
 // Ha nincs action paraméter, akkor a projektlista jelenik meg.

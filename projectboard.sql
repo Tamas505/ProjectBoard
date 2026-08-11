@@ -16,7 +16,7 @@ CREATE TABLE projects (
     title VARCHAR(255) NOT NULL,
     description TEXT,
     type ENUM('personal', 'client') NOT NULL DEFAULT 'personal',
-    status ENUM('active', 'completed', 'paused') NOT NULL DEFAULT 'active',
+    status ENUM('planning', 'active', 'completed', 'cancelled') NOT NULL DEFAULT 'planning',
     price INT DEFAULT NULL,
     deadline DATE DEFAULT NULL,
     github_url VARCHAR(255) DEFAULT NULL,
@@ -40,4 +40,7 @@ CREATE TABLE project_versions (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_hungarian_ci;
 
 INSERT INTO admins (username, password)
-VALUES ('admin', 'admin13');
+VALUES (
+    'admin',
+    '$2y$10$oOao0n8b8Vcx8QAq1085SOeKifl1wo5MJS5WcXEk3I508bBwxOlSu'
+);
