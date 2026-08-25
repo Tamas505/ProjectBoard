@@ -150,19 +150,6 @@
                     value="<?= htmlspecialchars($project["price"] ?? "") ?>">
             </div>
 
-            <!-- Verziószám -->
-            <div class="mb-3">
-                <label class="form-label">
-                    Verziószám
-                </label>
-
-                <input
-                    type="text"
-                    name="version_number"
-                    class="form-control"
-                    value="<?= htmlspecialchars($latestVersion["version_number"] ?? "") ?>">
-            </div>
-
             <!-- GitHub URL -->
             <div class="mb-3">
                 <label class="form-label">

@@ -143,17 +143,6 @@ class ProjectController
             if (empty($errors)) {
                 $this->projectModel->update($id, $_POST);
 
-                // A megadott verziószám kiolvasása.
-                $versionNumber = trim($_POST["version_number"] ?? "");
-
-                // Új verzió létrehozása, ha van verziószám és eltér a legutóbbitól.
-                if (
-                    $versionNumber !== "" &&
-                    (!$latestVersion || $versionNumber !== $latestVersion["version_number"])
-                ) {
-                    $this->versionModel->createVersion($id, $versionNumber);
-                }
-
                 // Sikeres módosítás után visszairányítás a projektlistára.
                 $this->redirect();
             }

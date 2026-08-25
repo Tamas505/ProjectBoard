@@ -46,3 +46,5 @@ PROJECTBOARD
 ├── projectboard.sql
 ├── Readme.md
 └── Readme.txt
+
+http://localhost/ProjectBoard/public/
